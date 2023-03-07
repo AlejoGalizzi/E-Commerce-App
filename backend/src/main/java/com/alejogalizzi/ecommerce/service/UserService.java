@@ -30,6 +30,7 @@ public class UserService implements IUserService {
     Authority authority = new Authority();
     authority.setAuthority(Roles.ROLE_USER.name());
     authority.setUser(user);
+    user.addAuthority(authority);
     return UserMapper.mapEntityToDto(userRepository.save(user));
   }
 }
