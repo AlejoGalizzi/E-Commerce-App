@@ -1,11 +1,13 @@
 package com.alejogalizzi.ecommerce.jwt;
 
+import com.alejogalizzi.ecommerce.model.authorization.Authority;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
@@ -50,11 +52,5 @@ public class JwtTokenUtil {
 
   public String getUsernameFromToken(String token) {
     return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
-  }
-
-  private List<String> convertTo(List<GrantedAuthority> grantedAuthorities) {
-    return grantedAuthorities.stream()
-        .map(GrantedAuthority::getAuthority)
-        .collect(Collectors.toList());
   }
 }

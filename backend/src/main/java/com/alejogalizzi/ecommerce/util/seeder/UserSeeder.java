@@ -3,6 +3,7 @@ package com.alejogalizzi.ecommerce.util.seeder;
 import com.alejogalizzi.ecommerce.model.authorization.User;
 import com.alejogalizzi.ecommerce.model.authorization.Authority;
 import com.alejogalizzi.ecommerce.repository.IUserRepository;
+import com.alejogalizzi.ecommerce.util.constants.Roles;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ public class UserSeeder implements CommandLineRunner {
       "myPassword653",
       "myPassword6123");
 
-  private static final List<Authority> ROLES = List.of(new Authority(), new Authority());
   @Autowired
   private PasswordEncoder passwordEncoder;
 
@@ -42,11 +42,11 @@ public class UserSeeder implements CommandLineRunner {
   private void createUsers() {
     for (int index = 0; index < 2; index++) {
       createUser(USERNAMES.get(index),
-          PASSWORDS.get(index), "ROLE_ADMIN");
+          PASSWORDS.get(index), Roles.ROLE_ADMIN.name());
     }
     for (int index = 2; index < 4; index++) {
       createUser(USERNAMES.get(index),
-          PASSWORDS.get(index), "ROLE_USER");
+          PASSWORDS.get(index), Roles.ROLE_USER.name());
     }
   }
 

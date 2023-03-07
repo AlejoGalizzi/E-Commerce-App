@@ -1,5 +1,6 @@
 package com.alejogalizzi.ecommerce.model.authorization;
 
+import com.alejogalizzi.ecommerce.util.constants.Roles;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +35,6 @@ public class Authority implements GrantedAuthority {
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  public static SimpleGrantedAuthority USER_ROLE = new SimpleGrantedAuthority("ROLE_USER");
-  public static SimpleGrantedAuthority ADMIN_ROLE = new SimpleGrantedAuthority("ROLE_ADMIN");
+  public static SimpleGrantedAuthority USER_ROLE = new SimpleGrantedAuthority(Roles.ROLE_USER.name());
+  public static SimpleGrantedAuthority ADMIN_ROLE = new SimpleGrantedAuthority(Roles.ROLE_ADMIN.name());
 }
