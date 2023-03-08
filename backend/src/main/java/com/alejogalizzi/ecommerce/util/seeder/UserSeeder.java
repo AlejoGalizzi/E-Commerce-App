@@ -1,7 +1,7 @@
 package com.alejogalizzi.ecommerce.util.seeder;
 
+import com.alejogalizzi.ecommerce.model.authorization.Role;
 import com.alejogalizzi.ecommerce.model.authorization.User;
-import com.alejogalizzi.ecommerce.model.authorization.Authority;
 import com.alejogalizzi.ecommerce.repository.IUserRepository;
 import com.alejogalizzi.ecommerce.util.constants.Roles;
 import java.util.List;
@@ -55,15 +55,8 @@ public class UserSeeder implements CommandLineRunner {
     user.setUsername(username);
     user.setPassword(passwordEncoder.encode(password));
     if(Objects.equals(role, "ROLE_ADMIN")) {
-      Authority authority_user = new Authority();
-      authority_user.setAuthority("ROLE_USER");
-      authority_user.setUser(user);
-      user.getAuthorities().add(authority_user);
-    }
-    Authority authority = new Authority();
-    authority.setAuthority(role);
-    authority.setUser(user);
-    user.getAuthorities().add(authority);
+      user.setRole(Role.ROLE_ADMIN);
+    }else user.setRole(Role.ROLE_USER);
     userRepository.save(user);
   }
 }

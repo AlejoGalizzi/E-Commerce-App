@@ -16,25 +16,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@Table(name = "authorities")
-@Entity
-public class Authority implements GrantedAuthority {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
-
-
-  private String authority;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false)
-  private User user;
-
-  public static SimpleGrantedAuthority USER_ROLE = new SimpleGrantedAuthority(Roles.ROLE_USER.name());
-  public static SimpleGrantedAuthority ADMIN_ROLE = new SimpleGrantedAuthority(Roles.ROLE_ADMIN.name());
+public enum Role {
+  ROLE_ADMIN,
+  ROLE_USER
 }

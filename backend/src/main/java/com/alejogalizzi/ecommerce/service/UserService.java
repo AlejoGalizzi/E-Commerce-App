@@ -1,9 +1,8 @@
 package com.alejogalizzi.ecommerce.service;
 
 import com.alejogalizzi.ecommerce.exception.AlreadyRegister;
-import com.alejogalizzi.ecommerce.jwt.JwtTokenUtil;
 import com.alejogalizzi.ecommerce.mapper.UserMapper;
-import com.alejogalizzi.ecommerce.model.authorization.Authority;
+import com.alejogalizzi.ecommerce.model.authorization.Role;
 import com.alejogalizzi.ecommerce.model.authorization.User;
 import com.alejogalizzi.ecommerce.model.dto.UserDTO;
 import com.alejogalizzi.ecommerce.repository.IUserRepository;
@@ -27,10 +26,7 @@ public class UserService implements IUserService {
     User user = new User();
     user.setUsername(userDTO.getUsername());
     user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
-    Authority authority = new Authority();
-    authority.setAuthority(Roles.ROLE_USER.name());
-    authority.setUser(user);
-    user.addAuthority(authority);
+    user.setRole(Role.ROLE_USER);
     return UserMapper.mapEntityToDto(userRepository.save(user));
   }
 }

@@ -1,6 +1,6 @@
 package com.alejogalizzi.ecommerce.controller;
 
-import com.alejogalizzi.ecommerce.exception.DisableExtensiom;
+import com.alejogalizzi.ecommerce.exception.DisableException;
 import com.alejogalizzi.ecommerce.exception.InvalidCredentialsException;
 import com.alejogalizzi.ecommerce.jwt.JwtTokenUtil;
 import com.alejogalizzi.ecommerce.model.dto.UserDTO;
@@ -68,7 +68,7 @@ public class AuthenticationController {
       authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(username, password));
     } catch (DisabledException e) {
-      throw new DisableExtensiom("User disabled");
+      throw new DisableException("User disabled");
     } catch (BadCredentialsException e) {
       throw new InvalidCredentialsException("Wrong credentials");
     }
