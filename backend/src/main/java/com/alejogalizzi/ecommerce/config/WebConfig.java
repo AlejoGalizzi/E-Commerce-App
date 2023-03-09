@@ -3,11 +3,16 @@ package com.alejogalizzi.ecommerce.config;
 import com.alejogalizzi.ecommerce.filter.JwtRequestFilter;
 import com.alejogalizzi.ecommerce.jwt.JwtAuthenticationEntryPoint;
 import com.alejogalizzi.ecommerce.service.JwtUserDetailsService;
+import com.alejogalizzi.ecommerce.util.constants.Role;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,6 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class WebConfig {
 
   @Autowired
@@ -26,6 +32,14 @@ public class WebConfig {
 
   @Autowired
   private JwtUserDetailsService jwtUserDetailsService;
+
+  @Bean
+  public AuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+    authenticationProvider.setUserDetailsService(jwtUserDetailsService);
+    authenticationProvider.setPasswordEncoder(passwordEncoder());
+    return authenticationProvider;
+  };
 
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
@@ -43,14 +57,9 @@ public class WebConfig {
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(HttpSecurity http,
-      BCryptPasswordEncoder bCryptPasswordEncoder)
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
       throws Exception {
-    return http.getSharedObject(AuthenticationManagerBuilder.class)
-        .userDetailsService(jwtUserDetailsService)
-        .passwordEncoder(bCryptPasswordEncoder)
-        .and()
-        .build();
+    return config.getAuthenticationManager();
   }
 
   @Bean
@@ -63,9 +72,11 @@ public class WebConfig {
         .and()
         .authorizeHttpRequests()
         .requestMatchers("/register", "/authenticate", "/validate-token").permitAll()
-        .requestMatchers("/products").authenticated()
-        .and().exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-        .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .requestMatchers(HttpMethod.GET, "/products/**").hasAnyAuthority(Role.ROLE_USER.name(), Role.ROLE_ADMIN.name())
+        .requestMatchers(HttpMethod.POST, "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
+        .anyRequest().authenticated()
+        .and()
+        .exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
         .and()
         .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling()
