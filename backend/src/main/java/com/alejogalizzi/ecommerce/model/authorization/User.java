@@ -1,15 +1,20 @@
 package com.alejogalizzi.ecommerce.model.authorization;
 
-import com.alejogalizzi.ecommerce.util.constants.Role;
+import com.alejogalizzi.ecommerce.util.constants.Roles;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,13 +40,16 @@ public class User implements UserDetails {
   private String password;
 
 
-  @Enumerated(EnumType.STRING)
-  private Role role;
+  @ManyToMany
+  @JoinTable(name = "users_roles",
+      joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+  private Set<Role> roles;
 
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(role.name()));
+    return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
   }
 
   @Override

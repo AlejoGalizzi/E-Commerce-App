@@ -3,7 +3,7 @@ package com.alejogalizzi.ecommerce.config;
 import com.alejogalizzi.ecommerce.filter.JwtRequestFilter;
 import com.alejogalizzi.ecommerce.jwt.JwtAuthenticationEntryPoint;
 import com.alejogalizzi.ecommerce.service.JwtUserDetailsService;
-import com.alejogalizzi.ecommerce.util.constants.Role;
+import com.alejogalizzi.ecommerce.util.constants.Roles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -72,8 +72,8 @@ public class WebConfig {
         .and()
         .authorizeHttpRequests()
         .requestMatchers("/register", "/authenticate", "/validate-token").permitAll()
-        .requestMatchers(HttpMethod.GET, "/products/**").hasAnyAuthority(Role.ROLE_USER.name(), Role.ROLE_ADMIN.name())
-        .requestMatchers(HttpMethod.POST, "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
+        .requestMatchers(HttpMethod.GET, "/products/**").hasAnyAuthority(Roles.ROLE_USER.name(), Roles.ROLE_ADMIN.name())
+        .requestMatchers(HttpMethod.POST, "/products/**").hasAuthority(Roles.ROLE_ADMIN.name())
         .anyRequest().authenticated()
         .and()
         .exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())

@@ -9,7 +9,7 @@ import com.alejogalizzi.ecommerce.model.authorization.User;
 import com.alejogalizzi.ecommerce.model.dto.UserDTO;
 import com.alejogalizzi.ecommerce.repository.IUserRepository;
 import com.alejogalizzi.ecommerce.service.abstraction.IUserService;
-import com.alejogalizzi.ecommerce.util.constants.Role;
+import com.alejogalizzi.ecommerce.util.constants.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -42,7 +42,7 @@ public class UserService implements IUserService {
     if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
       throw new AlreadyRegister("User is already registered");
     }
-    User user = User.builder().username(userDTO.getUsername()).role(Role.ROLE_USER)
+    User user = User.builder().username(userDTO.getUsername()).roles(Roles.ROLE_USER)
         .password(passwordEncoder.encode(userDTO.getPassword())).build();
     return UserMapper.mapEntityToDto(userRepository.save(user));
   }

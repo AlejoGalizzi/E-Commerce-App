@@ -1,6 +1,6 @@
 package com.alejogalizzi.ecommerce.model.dto;
 
-import com.alejogalizzi.ecommerce.util.constants.Role;
+import com.alejogalizzi.ecommerce.util.constants.Roles;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import jakarta.validation.constraints.NotBlank;
@@ -26,5 +26,5 @@ public class UserDTO {
   private String password;
 
   @JsonProperty(access = Access.READ_ONLY)
-  private Role role;
+  private Roles roles;
 }

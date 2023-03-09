@@ -2,7 +2,7 @@ package com.alejogalizzi.ecommerce.util.seeder;
 
 import com.alejogalizzi.ecommerce.model.authorization.User;
 import com.alejogalizzi.ecommerce.repository.IUserRepository;
-import com.alejogalizzi.ecommerce.util.constants.Role;
+import com.alejogalizzi.ecommerce.util.constants.Roles;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +41,11 @@ public class UserSeeder implements CommandLineRunner {
   private void createUsers() {
     for (int index = 0; index < 2; index++) {
       createUser(USERNAMES.get(index),
-          PASSWORDS.get(index), Role.ROLE_ADMIN.name());
+          PASSWORDS.get(index), Roles.ROLE_ADMIN.name());
     }
     for (int index = 2; index < 4; index++) {
       createUser(USERNAMES.get(index),
-          PASSWORDS.get(index), Role.ROLE_USER.name());
+          PASSWORDS.get(index), Roles.ROLE_USER.name());
     }
   }
 
@@ -54,8 +54,8 @@ public class UserSeeder implements CommandLineRunner {
     user.setUsername(username);
     user.setPassword(passwordEncoder.encode(password));
     if(Objects.equals(role, "ROLE_ADMIN")) {
-      user.setRole(Role.ROLE_ADMIN);
-    }else user.setRole(Role.ROLE_USER);
+      user.setRoles(Roles.ROLE_ADMIN);
+    }else user.setRoles(Roles.ROLE_USER);
     userRepository.save(user);
   }
 }

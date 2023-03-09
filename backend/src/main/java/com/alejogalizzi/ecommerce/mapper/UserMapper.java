@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public final class UserMapper {
 
   public static UserDTO mapEntityToDto(User user) {
-    return new UserDTO(user.getId(), user.getUsername(), user.getPassword(), user.getRole());
+    return new UserDTO(user.getId(), user.getUsername(), user.getPassword(), user.getRoles());
   }
 
 }

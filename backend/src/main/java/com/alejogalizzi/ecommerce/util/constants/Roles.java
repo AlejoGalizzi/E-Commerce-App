@@ -1,6 +1,6 @@
 package com.alejogalizzi.ecommerce.util.constants;
 
-public enum Role {
+public enum Roles {
   ROLE_USER,
   ROLE_ADMIN
 }
