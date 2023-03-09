@@ -1,6 +1,7 @@
 package com.alejogalizzi.ecommerce.model.authorization;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,6 +26,6 @@ public class Privilege {
 
   private String name;
 
-  @ManyToMany(mappedBy = "privileges")
+  @ManyToMany(mappedBy = "privileges", fetch = FetchType.EAGER)
   private Set<Role> roles;
 }

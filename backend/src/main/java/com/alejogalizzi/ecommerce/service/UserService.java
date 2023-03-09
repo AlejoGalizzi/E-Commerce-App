@@ -5,11 +5,14 @@ import com.alejogalizzi.ecommerce.exception.DisableException;
 import com.alejogalizzi.ecommerce.exception.InvalidCredentialsException;
 import com.alejogalizzi.ecommerce.jwt.JwtTokenUtil;
 import com.alejogalizzi.ecommerce.mapper.UserMapper;
+import com.alejogalizzi.ecommerce.model.authorization.Role;
 import com.alejogalizzi.ecommerce.model.authorization.User;
 import com.alejogalizzi.ecommerce.model.dto.UserDTO;
+import com.alejogalizzi.ecommerce.repository.IRoleRepository;
 import com.alejogalizzi.ecommerce.repository.IUserRepository;
 import com.alejogalizzi.ecommerce.service.abstraction.IUserService;
 import com.alejogalizzi.ecommerce.util.constants.Roles;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -24,6 +27,9 @@ public class UserService implements IUserService {
 
   @Autowired
   private IUserRepository userRepository;
+
+  @Autowired
+  private IRoleRepository roleRepository;
 
   @Autowired
   private AuthenticationManager authenticationManager;
@@ -42,7 +48,8 @@ public class UserService implements IUserService {
     if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
       throw new AlreadyRegister("User is already registered");
     }
-    User user = User.builder().username(userDTO.getUsername()).roles(Roles.ROLE_USER)
+    Role role = roleRepository.findByName(Roles.ROLE_USER.name());
+    User user = User.builder().username(userDTO.getUsername()).roles(Set.of(role))
         .password(passwordEncoder.encode(userDTO.getPassword())).build();
     return UserMapper.mapEntityToDto(userRepository.save(user));
   }

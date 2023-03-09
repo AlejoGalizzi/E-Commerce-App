@@ -9,6 +9,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,9 +35,17 @@ public class Role {
   @ManyToMany(mappedBy = "roles")
   private Collection<User> users;
 
-  @ManyToMany(mappedBy = "roles")
+  @ManyToMany
   @JoinTable(name = "roles_privileges",
       joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
-  private Set<Privilege> privileges;
+  private Set<Privilege> privileges = new HashSet<>();
+
+  public List<String> getListOfPrivileges() {
+    return privileges.stream().map(Privilege::getName).toList();
+  }
+
+  public void addPrivilege(Privilege privilege) {
+    privileges.add(privilege);
+  }
 }
