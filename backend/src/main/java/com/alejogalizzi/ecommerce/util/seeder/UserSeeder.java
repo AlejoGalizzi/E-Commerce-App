@@ -105,12 +105,13 @@ public class UserSeeder implements CommandLineRunner {
     user.setUsername(username);
     user.setPassword(passwordEncoder.encode(password));
     if (Objects.equals(role, "ROLE_ADMIN")) {
-      user.setRoles(roles.stream().filter(dbRole -> dbRole.getName() == Roles.ROLE_ADMIN.name()
-          || dbRole.getName() == Roles.ROLE_USER.name()).collect(
+      user.setRoles(roles.stream().filter(dbRole ->
+          Objects.equals(dbRole.getName(), Roles.ROLE_ADMIN.name())
+          || Objects.equals(dbRole.getName(), Roles.ROLE_USER.name())).collect(
           Collectors.toSet()));
     } else {
       user.setRoles(
-          roles.stream().filter(dbRole -> dbRole.getName() == Roles.ROLE_USER.name()).collect(
+          roles.stream().filter(dbRole -> Objects.equals(dbRole.getName(), Roles.ROLE_USER.name())).collect(
               Collectors.toSet()));
     }
     userRepository.save(user);
