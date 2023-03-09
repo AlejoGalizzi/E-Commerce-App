@@ -4,5 +4,9 @@ import com.alejogalizzi.ecommerce.model.dto.UserDTO;
 
 public interface IUserService {
 
-  UserDTO createUser(UserDTO userDTO);
+  UserDTO register(UserDTO userDTO);
+
+  String authenticate(UserDTO userDTO);
+
+  boolean validateToken(String token);
 }

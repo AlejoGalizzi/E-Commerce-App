@@ -1,25 +1,27 @@
 package com.alejogalizzi.ecommerce.model.authorization;
 
-import jakarta.persistence.CascadeType;
+import com.alejogalizzi.ecommerce.util.constants.Role;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
+import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
+@Builder
 @Table(name = "users")
 @Entity
 public class User implements UserDetails {
@@ -33,11 +35,13 @@ public class User implements UserDetails {
   private String password;
 
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Authority> authorities = new HashSet<>();
+  @Enumerated(EnumType.STRING)
+  private Role role;
 
-  public void addAuthority(Authority authority) {
-    authorities.add(authority);
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of(new SimpleGrantedAuthority(role.name()));
   }
 
   @Override
@@ -58,14 +62,5 @@ public class User implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
-  }
-
-  public boolean isAdmin() {
-    for (GrantedAuthority authority : authorities) {
-      if (authority.getAuthority().equals("ROLE_ADMIN")) {
-        return true;
-      }
-    }
-    return false;
   }
 }

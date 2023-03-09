@@ -22,10 +22,9 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
       AccessDeniedException accessDeniedException) throws IOException, ServletException {
 
     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-    response.setContentType(MediaType.APPLICATION_JSON.getType());
+    response.setContentType(MediaType.APPLICATION_JSON.getSubtype());
     ObjectMapper mapper = new ObjectMapper();
-response.getWriter().write(mapper.writeValueAsString(getGenericResponse()));
-
+    response.getWriter().write(mapper.writeValueAsString(getGenericResponse()));
   }
 
   private static ErrorResponse getGenericResponse() {
