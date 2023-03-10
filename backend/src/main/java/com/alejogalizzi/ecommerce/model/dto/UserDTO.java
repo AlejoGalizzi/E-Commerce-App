@@ -3,6 +3,7 @@ package com.alejogalizzi.ecommerce.model.dto;
 import com.alejogalizzi.ecommerce.util.constants.Roles;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.util.Set;
@@ -16,9 +17,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
+
+  @JsonProperty(access = Access.READ_ONLY)
   private long id;
 
-  @NotBlank
+  @NotBlank(message = "Email must not be null or empty")
+  @Email(message = "email has to have the email format")
+  private String email;
+
+  @NotBlank(message = "Username must not be null or empty")
   @Size(min = 4, max = 24, message = "Username must have a lenght between 4 and 24 characters")
   private String username;
 

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public final class UserMapper {
 
   public static UserDTO mapEntityToDto(User user) {
-    return new UserDTO(user.getId(), user.getUsername(), user.getPassword(), getEnumRoles(user.getRoles()));
+    return new UserDTO(user.getId(), user.getEmail(), user.getUsername(), user.getPassword(), getEnumRoles(user.getRoles()));
   }
 
   private static Set<Roles> getEnumRoles(Set<Role> roles) {
