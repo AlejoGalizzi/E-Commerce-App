@@ -4,7 +4,6 @@ import com.alejogalizzi.ecommerce.filter.JwtRequestFilter;
 import com.alejogalizzi.ecommerce.jwt.JwtAuthenticationEntryPoint;
 import com.alejogalizzi.ecommerce.service.JwtUserDetailsService;
 import com.alejogalizzi.ecommerce.util.constants.Privileges;
-import com.alejogalizzi.ecommerce.util.constants.Roles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -82,7 +81,6 @@ public class WebConfig {
         .requestMatchers(HttpMethod.DELETE).hasAuthority(Privileges.DELETE.name())
         .requestMatchers("/products/**")
         .hasAnyRole("USER", "ADMIN")
-//      .requestMatchers(HttpMethod.POST, "/products/**").hasAuthority(Roles.ROLE_ADMIN.name())
         .anyRequest().authenticated()
         .and()
         .exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
