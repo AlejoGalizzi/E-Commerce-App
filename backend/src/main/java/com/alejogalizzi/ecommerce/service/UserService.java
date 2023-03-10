@@ -10,6 +10,7 @@ import com.alejogalizzi.ecommerce.model.authorization.User;
 import com.alejogalizzi.ecommerce.model.dto.UserDTO;
 import com.alejogalizzi.ecommerce.repository.IRoleRepository;
 import com.alejogalizzi.ecommerce.repository.IUserRepository;
+import com.alejogalizzi.ecommerce.service.abstraction.IEmailService;
 import com.alejogalizzi.ecommerce.service.abstraction.IUserService;
 import com.alejogalizzi.ecommerce.util.constants.Roles;
 import java.util.Set;
@@ -39,7 +40,6 @@ public class UserService implements IUserService {
 
   @Autowired
   private JwtUserDetailsService userDetailsService;
-
   @Autowired
   private JwtTokenUtil jwtTokenUtil;
 
