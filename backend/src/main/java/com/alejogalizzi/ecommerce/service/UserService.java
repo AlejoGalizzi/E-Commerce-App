@@ -45,11 +45,11 @@ public class UserService implements IUserService {
 
   @Override
   public UserDTO register(UserDTO userDTO) {
-    if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
+    if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
       throw new AlreadyRegister("User is already registered");
     }
     Role role = roleRepository.findByName(Roles.ROLE_USER.name());
-    User user = User.builder().username(userDTO.getUsername()).roles(Set.of(role))
+    User user = User.builder().username(userDTO.getUsername()).email(userDTO.getEmail()).roles(Set.of(role))
         .password(passwordEncoder.encode(userDTO.getPassword())).build();
     return UserMapper.mapEntityToDto(userRepository.save(user));
   }
