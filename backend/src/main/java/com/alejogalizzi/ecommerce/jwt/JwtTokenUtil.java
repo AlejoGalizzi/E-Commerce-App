@@ -1,10 +1,14 @@
 package com.alejogalizzi.ecommerce.jwt;
 
+import com.alejogalizzi.ecommerce.model.authorization.Role;
+import com.alejogalizzi.ecommerce.model.authorization.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,11 +24,9 @@ public class JwtTokenUtil {
 
   public String generateToken(UserDetails userDetails) {
     Map<String, Object> claims = new HashMap<>();
-    claims.put(AUTHORITIES,
-        userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+    claims.put(AUTHORITIES, userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
     return doGenerateToken(claims, userDetails.getUsername());
   }
-
   private String doGenerateToken(Map<String, Object> claims, String username) {
     return Jwts.builder()
         .setClaims(claims)
