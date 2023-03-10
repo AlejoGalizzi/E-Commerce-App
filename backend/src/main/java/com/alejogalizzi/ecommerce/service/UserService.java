@@ -10,6 +10,7 @@ import com.alejogalizzi.ecommerce.model.authorization.User;
 import com.alejogalizzi.ecommerce.model.dto.UserDTO;
 import com.alejogalizzi.ecommerce.repository.IRoleRepository;
 import com.alejogalizzi.ecommerce.repository.IUserRepository;
+import com.alejogalizzi.ecommerce.service.abstraction.IEmailService;
 import com.alejogalizzi.ecommerce.service.abstraction.IUserService;
 import com.alejogalizzi.ecommerce.util.constants.Roles;
 import java.util.Set;
@@ -39,17 +40,16 @@ public class UserService implements IUserService {
 
   @Autowired
   private JwtUserDetailsService userDetailsService;
-
   @Autowired
   private JwtTokenUtil jwtTokenUtil;
 
   @Override
   public UserDTO register(UserDTO userDTO) {
-    if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
+    if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
       throw new AlreadyRegister("User is already registered");
     }
     Role role = roleRepository.findByName(Roles.ROLE_USER.name());
-    User user = User.builder().username(userDTO.getUsername()).roles(Set.of(role))
+    User user = User.builder().username(userDTO.getUsername()).email(userDTO.getEmail()).roles(Set.of(role))
         .password(passwordEncoder.encode(userDTO.getPassword())).build();
     return UserMapper.mapEntityToDto(userRepository.save(user));
   }

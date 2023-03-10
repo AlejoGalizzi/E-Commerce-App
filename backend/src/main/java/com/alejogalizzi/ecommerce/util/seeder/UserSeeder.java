@@ -77,9 +77,10 @@ public class UserSeeder implements CommandLineRunner {
     Role user = new Role();
     user.setName(Roles.ROLE_USER.name());
     privileges.stream()
-        .filter(privilege -> Objects.equals(privilege.getName(), Privileges.READ.name())).findFirst()
+        .filter(privilege -> Objects.equals(privilege.getName(), Privileges.READ.name()))
+        .findFirst()
         .ifPresent(user::addPrivilege);
-    roleRepository.saveAll(List.of(admin,user));
+    roleRepository.saveAll(List.of(admin, user));
   }
 
   private void seedUserTable() {
@@ -104,15 +105,17 @@ public class UserSeeder implements CommandLineRunner {
     User user = new User();
     user.setUsername(username);
     user.setPassword(passwordEncoder.encode(password));
+    user.setEmail(String.format("%s@gmail.com", username));
     if (Objects.equals(role, "ROLE_ADMIN")) {
       user.setRoles(roles.stream().filter(dbRole ->
           Objects.equals(dbRole.getName(), Roles.ROLE_ADMIN.name())
-          || Objects.equals(dbRole.getName(), Roles.ROLE_USER.name())).collect(
+              || Objects.equals(dbRole.getName(), Roles.ROLE_USER.name())).collect(
           Collectors.toSet()));
     } else {
       user.setRoles(
-          roles.stream().filter(dbRole -> Objects.equals(dbRole.getName(), Roles.ROLE_USER.name())).collect(
-              Collectors.toSet()));
+          roles.stream().filter(dbRole -> Objects.equals(dbRole.getName(), Roles.ROLE_USER.name()))
+              .collect(
+                  Collectors.toSet()));
     }
     userRepository.save(user);
   }
