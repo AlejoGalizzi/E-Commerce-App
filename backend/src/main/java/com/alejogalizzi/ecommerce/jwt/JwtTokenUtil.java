@@ -18,25 +18,15 @@ import org.springframework.stereotype.Service;
 public class JwtTokenUtil {
 
   private static final String AUTHORITIES = "authorities";
-  private static final String ROLES="roles";
 
   @Value("${secret.key}")
   private String secret;
 
   public String generateToken(UserDetails userDetails) {
     Map<String, Object> claims = new HashMap<>();
-    User user = (User) userDetails;
-    Set<String> authorities = new HashSet<>();
-
-    for(Role role : user.getRoles()){
-      role.getPrivileges().stream().forEach(privilege -> authorities.add(privilege.getName()));
-    }
-    claims.put(AUTHORITIES, authorities);
-    claims.put(ROLES,
-        userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+    claims.put(AUTHORITIES, userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
     return doGenerateToken(claims, userDetails.getUsername());
   }
-
   private String doGenerateToken(Map<String, Object> claims, String username) {
     return Jwts.builder()
         .setClaims(claims)

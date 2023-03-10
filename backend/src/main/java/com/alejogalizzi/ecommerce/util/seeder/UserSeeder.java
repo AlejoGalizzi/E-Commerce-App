@@ -53,13 +53,13 @@ public class UserSeeder implements CommandLineRunner {
 
   private void createPrivileges() {
     Privilege write = new Privilege();
-    write.setName(Privileges.WRITE_PRIVILEGE.name());
+    write.setName(Privileges.WRITE.name());
     Privilege read = new Privilege();
-    read.setName(Privileges.READ_PRIVILEGE.name());
+    read.setName(Privileges.READ.name());
     Privilege edit = new Privilege();
-    edit.setName(Privileges.EDIT_PRIVILEGES.name());
+    edit.setName(Privileges.EDIT.name());
     Privilege delete = new Privilege();
-    delete.setName(Privileges.DELETE_PRIVILEGES.name());
+    delete.setName(Privileges.DELETE.name());
     privilegeRepository.saveAll(List.of(read, write, edit, delete));
   }
 
@@ -77,7 +77,7 @@ public class UserSeeder implements CommandLineRunner {
     Role user = new Role();
     user.setName(Roles.ROLE_USER.name());
     privileges.stream()
-        .filter(privilege -> Objects.equals(privilege.getName(), Privileges.READ_PRIVILEGE.name())).findFirst()
+        .filter(privilege -> Objects.equals(privilege.getName(), Privileges.READ.name())).findFirst()
         .ifPresent(user::addPrivilege);
     roleRepository.saveAll(List.of(admin,user));
   }

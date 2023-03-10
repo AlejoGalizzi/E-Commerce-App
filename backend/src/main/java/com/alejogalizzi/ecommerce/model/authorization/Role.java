@@ -16,6 +16,7 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode.Exclude;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.sql.ast.tree.expression.Collation;
@@ -37,6 +38,7 @@ public class Role {
   @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
   private Collection<User> users;
 
+  @Exclude
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "roles_privileges",
       joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),

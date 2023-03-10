@@ -11,6 +11,7 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode.Exclude;
 import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
@@ -26,6 +27,7 @@ public class Privilege {
 
   private String name;
 
+  @Exclude
   @ManyToMany(mappedBy = "privileges", fetch = FetchType.EAGER)
   private Set<Role> roles;
 }

@@ -1,6 +1,7 @@
 package com.alejogalizzi.ecommerce.model.authorization;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,6 +10,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,7 +39,7 @@ public class User implements UserDetails {
 
 
   @ToString.Exclude
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "users_roles",
       joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -46,7 +48,13 @@ public class User implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
+    Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
+    roles.stream().forEach(role ->
+        authorities.add(new SimpleGrantedAuthority(role.getName()))
+    );
+    roles.stream().forEach(role -> role.getPrivileges().stream()
+        .forEach(privilege -> authorities.add(new SimpleGrantedAuthority(privilege.getName()))));
+    return authorities;
   }
 
   @Override
