@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,4 +36,7 @@ public class UserDTO {
 
   @JsonProperty(access = Access.READ_ONLY)
   private Set<Roles> roles;
+
+  @JsonProperty(access = Access.READ_ONLY)
+  private List<Long> orderIds;
 }

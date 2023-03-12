@@ -26,7 +26,7 @@ public class ProductDTO {
 
   @NotBlank
   @Min(1)
-  private BigDecimal price;
+  private double price;
 
   @NotBlank
   @Min(3)
